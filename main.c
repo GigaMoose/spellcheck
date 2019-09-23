@@ -1,6 +1,14 @@
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
+#include <check.h>
+#include "dictionary.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include "dictionary.h"
+#include <errno.h>
+
+
+bool check_word(const char* word, hashmap_t hashtable[]);
 
 int main(int argc, char * argv[])
 {
@@ -9,6 +17,8 @@ int main(int argc, char * argv[])
    // printf("%s\n", hashtable[30]->word);
    // printf("%s\n", hashtable[15]->word);
    // printf("%s\n", hashtable[33]->word);
+
+    check_word(argv[1], hashtable);
 
     node * new_node;
 
@@ -23,4 +33,6 @@ int main(int argc, char * argv[])
             //printf ("%s %i \n", new_node->word, i) ;
         }
     }
-}
+
+    
+ }

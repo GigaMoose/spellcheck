@@ -44,22 +44,25 @@ bool check_word(const char* word, hashmap_t hashtable[]) {
         Set curosr to cursor->next.
     return False.
 */
-
+    printf("Checked words\n");
     //Set int bucket to the output of hash_function(word).
     int bucket = hash_function(word);
 
     //Set hashmap_t cursor equal to hashmap[bucket].
     hashmap_t cursor = hashtable[bucket];
-
+    if (cursor != NULL) {
+        printf("Cursor is not NULL\n");
+    }
     //While cursor is not NULL:
     while (cursor != NULL) {
+        printf("Word - %s\n", word);
         //If word equals cursor->word:
         if (strcmp(word, cursor->word) == 0) {
             //return True.
             return true;
             printf("Checked TRUE: Non-lcased - %s\n", word);
         }
-        // try lowercase compare
+
         if (strcasecmp(word, cursor->word) == 0) {
             //return True.
             return true;
@@ -67,6 +70,7 @@ bool check_word(const char* word, hashmap_t hashtable[]) {
         }
         //Set curosr to cursor->next.
         cursor = cursor->next;
+        printf("NEXT CURSOR\n");
     }
     //return False.
 	return false;
