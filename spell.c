@@ -30,7 +30,45 @@ bool check_word(const char* word, hashmap_t hashtable[]) {
     If the hash <0 or beyond limit, send false
     If found, true.
 
+    Set int bucket to the output of hash_function(word).
+    Set hashmap_t cursor equal to hashmap[bucket].
+    While cursor is not NULL:
+        If word equals cursor->word:
+            return True.
+        Set curosr to cursor->next.
+    Set int bucket to the output of hash_function(word).
+    Set hashmap_t cursor equal to hashmap[bucket].
+    While cursor is  not NULL:
+        If lower_case(word) equals curosr->word:
+            return True.
+        Set curosr to cursor->next.
+    return False.
 */
+
+    //Set int bucket to the output of hash_function(word).
+    int bucket = hash_function(word);
+
+    //Set hashmap_t cursor equal to hashmap[bucket].
+    hashmap_t cursor = hashtable[bucket];
+
+    //While cursor is not NULL:
+    while (cursor != NULL) {
+        //If word equals cursor->word:
+        if (strcmp(word, cursor->word) == 0) {
+            //return True.
+            return true;
+            printf("Checked TRUE: Non-lcased - %s\n", word);
+        }
+        // try lowercase compare
+        if (strcasecmp(word, cursor->word) == 0) {
+            //return True.
+            return true;
+            printf("Checked TRUE: lcased - %s\n", word);
+        }
+        //Set curosr to cursor->next.
+        cursor = cursor->next;
+    }
+    //return False.
 	return false;
 }
 
@@ -48,6 +86,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
     char * line = NULL;
     int bucket;
     size_t len = 0;
+    int wordsize = 0;
 
 
     //Initialize all values in hash table to NULL.
@@ -64,7 +103,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
         return false.*/
     if (fp == NULL){
         return false;
-        //printf("Dictionary File NOT Opened Succesfully\n");
+        printf("Dictionary File NOT Opened Succesfully\n");
     }
     //printf("Dictionary File Opened Succesfully: %s \n", dictionary_file);
 
@@ -82,7 +121,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
         //printf("malloc\n");
 
         if(new_node == NULL){
-            //printf("Unable to create new_node.\n");
+            printf("Unable to create new_node.\n");
             exit(0);
         }
 
@@ -92,13 +131,18 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
         //printf("set new node next to null\n");
 
 
-        //Set new_node->word equal to word.
+        //strip contrl characters at the end.
         line[strcspn(line, "\r\n")] = 0;
+        wordsize = strlen(line);
+        //printf("Word is: %s     word size is:  %d\n", line, wordsize);
+
+        //Set new_node->word equal to word.
+        strncpy(new_node->word,line,wordsize);
+        
+        
 
 
-        strncpy(new_node->word,line,strlen(line));
-        //printf("Dictionary word: %s...  Bucket #: %d\n", line, bucket);
-
+        
         //Set int bucket to hash_function(word).
         bucket = hash_function(new_node->word);
         //printf("bucket is Hash\n");
@@ -113,18 +157,19 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
         if(hashtable[bucket] != NULL){
             new_node->next = hashtable[bucket];
         }
+
         hashtable[bucket] = new_node;
     }
-
+ 
     // Close dict_file.
     free(line);
-    //printf("free line\n");
+    printf("free line\n");
 
     line = NULL;
-    //printf("NULL line\n");
+    printf("NULL line\n");
 
     fclose(fp);
-    //printf("close file\n");
+    printf("close file\n");
 
     return true;
 }
