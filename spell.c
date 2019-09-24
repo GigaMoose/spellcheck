@@ -16,8 +16,67 @@ references and credits in references.txt
 // Returns true if all words are spelled correctly, false otherwise. Array misspelled is populated with words that are misspelled.
 
 int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[]) {
+/* 
+Open file
+read a word from the file
+get a hash for the word
+check hash array to see if the word is a real word
+if the word comes back true, it is real word, go to next word.  If false, add that word to the misspelled array and increase the # of mispelled word counter
+close file
+return should be the # of mispelled words (from the counter)
 
-	return 0;
+    Set int num_misspelled to 0.
+    While line in fp is not EOF (end of file):
+        Read the line.
+        Split the line on spaces.
+        For each word in line:
+            Remove punctuation from beginning and end of word.
+            If not check_word(word):
+                Append word to misspelled.
+                Increment num_misspelled.
+    Return num_misspelled.
+*/
+
+
+// Set int num_misspelled to 0.
+int num_misspelled = 0;
+size_t len = 47;
+char * line = NULL;
+char * found_words;
+char * words_wo_punc = NULL;
+
+line = (char *)malloc(len * sizeof(char));
+
+if (line == NULL)
+  {
+      printf("Not able to allocate buffer for line.\n");
+      exit(1);
+  }
+//While line in fp is not EOF (end of file):
+// I tried to get this line to work for hours, and it would only read the first word, switching to fgets
+//while (getline(line, &len, fp) != NULL) {
+while (fgets(line, HASH_SIZE, fp) != NULL) {
+    printf("read the line - %s\n", line);
+    //Read the line.
+    //Split the line on spaces.
+    found_words = strtok(line, " ");
+    printf("found words - %s\n", found_words);
+    while (found_words != NULL) {
+        //Remove punctuation from beginning and end of word.
+        int i;
+        char * p;
+        //printf("found words - not null\n");
+        for(i=strlen(found_words)-1; ispunct(found_words[i]);--i)
+            found_words[i]='\0';
+        for(p=found_words;ispunct(*p);++p);
+            printf("The current words is - %s\n", found_words); 
+        
+        found_words = strtok(NULL, " ");
+    }
+}
+
+	return 0; 
+
 }
 
 
@@ -44,33 +103,58 @@ bool check_word(const char* word, hashmap_t hashtable[]) {
         Set curosr to cursor->next.
     return False.
 */
-    printf("Checked words\n");
+    //printf("Checked words\n");
+    //printf("What is my word - %s\n", word);
+
+    char lcword[LENGTH];
+
+    int wordsize;
+        
+    wordsize = strlen(word);
+    //lowercase
+    for (int i=0; i <= wordsize; i++) {
+        lcword[i] = tolower(word[i]);
+    }
+    
     //Set int bucket to the output of hash_function(word).
-    int bucket = hash_function(word);
+    int bucket = hash_function(lcword);
+    
+    
+
+
+    //caseresult = strcasecmp(word, cursor->word);
+    //printf("return: %d\n", caseresult);
+
+    lcword[wordsize] = '\0';
 
     //Set hashmap_t cursor equal to hashmap[bucket].
     hashmap_t cursor = hashtable[bucket];
+    //printf("lcword: %s    bucket word: %s\n", lcword, cursor->word);
+
     if (cursor != NULL) {
-        printf("Cursor is not NULL\n");
+        //printf("Cursor is not NULL\n");
     }
     //While cursor is not NULL:
     while (cursor != NULL) {
-        printf("Word - %s\n", word);
+        //printf("Word - %s\n", lcword);
+        //printf("Cursor Word - %s\n", cursor->word);
         //If word equals cursor->word:
-        if (strcmp(word, cursor->word) == 0) {
+        //if (strcmp(word, cursor->word) == 0) {
             //return True.
-            return true;
-            printf("Checked TRUE: Non-lcased - %s\n", word);
-        }
+        //    return true;
+        //    printf("Checked TRUE: Non-lcased - %s\n", word);
+        //}
+        //int caseresult;
+       
 
-        if (strcasecmp(word, cursor->word) == 0) {
+        if (strcmp(lcword, cursor->word) == 0) {
             //return True.
+            //printf("Checked TRUE: lcased - %s\n", lcword);
             return true;
-            printf("Checked TRUE: lcased - %s\n", word);
         }
         //Set curosr to cursor->next.
         cursor = cursor->next;
-        printf("NEXT CURSOR\n");
+        //printf("NEXT CURSOR\n");
     }
     //return False.
 	return false;
@@ -91,10 +175,10 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
     int bucket;
     size_t len = 0;
     int wordsize = 0;
-
+    
 
     //Initialize all values in hash table to NULL.
-    for (int i = 0; i < HASH_SIZE; i++){
+    for (int i = 0; i < HASH_SIZE; i++) {
         hashtable[i] = NULL;
     }
 
@@ -106,18 +190,18 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
     /*If dict_file is NULL:
         return false.*/
     if (fp == NULL){
+        //printf("Dictionary File NOT Opened Succesfully\n");
         return false;
-        printf("Dictionary File NOT Opened Succesfully\n");
     }
     //printf("Dictionary File Opened Succesfully: %s \n", dictionary_file);
 
-    for(int i = 0; i < HASH_SIZE; i++){
+    for(int i = 0; i < HASH_SIZE; i++) {
             hashtable[i] = NULL;
         }
     //printf("Null Hashtable\n");
 
     // While word in dict_file is not EOF (end of file):
-    while ((getline(&line, &len, fp)) != -1){
+    while ((getline(&line, &len, fp)) != -1) {
         //Set hashmap_t new_node to a new node.
         //printf("Not EOF\n");
 
@@ -125,7 +209,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
         //printf("malloc\n");
 
         if(new_node == NULL){
-            printf("Unable to create new_node.\n");
+            //printf("Unable to create new_node.\n");
             exit(0);
         }
 
@@ -138,13 +222,17 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
         //strip contrl characters at the end.
         line[strcspn(line, "\r\n")] = 0;
         wordsize = strlen(line);
-        //printf("Word is: %s     word size is:  %d\n", line, wordsize);
+        
+
+        //lowercase
+        for (int i=0; i <= wordsize; i++) {
+		    line[i] = tolower(line[i]);
+        }
 
         //Set new_node->word equal to word.
         strncpy(new_node->word,line,wordsize);
+        //printf("Word is: %s     word size is:  %d\n", line, wordsize);
         
-        
-
 
         
         //Set int bucket to hash_function(word).
@@ -167,13 +255,13 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
  
     // Close dict_file.
     free(line);
-    printf("free line\n");
+    //printf("free line\n");
 
     line = NULL;
-    printf("NULL line\n");
+    //printf("NULL line\n");
 
     fclose(fp);
-    printf("close file\n");
+    //printf("close file\n");
 
     return true;
 }
