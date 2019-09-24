@@ -75,7 +75,7 @@ while (fgets(line, HASH_SIZE, fp) != NULL) {
             //Append word to misspelled.
             misspelled[num_misspelled] = fixed_word;
         
-			//printf("Mispelled word - %s.  This is mispelled word # %d\n", found_words, num_misspelled+1);
+            //printf("Mispelled word - %s.  This is mispelled word # %d\n", found_words, num_misspelled+1);
 
             //Increment num_misspelled.
             num_misspelled++;
@@ -114,13 +114,15 @@ bool check_word(const char* word, hashmap_t hashtable[]) {
         Set curosr to cursor->next.
     return False.
 */
-    //printf("Checked words\n");
+    //printf("Check word\n");
     //printf("What is my word - %s\n", word);
 
-    char lcword[LENGTH];
+    char lcword[LENGTH+1];
     int wordsize;
 
     wordsize = strlen(word);
+
+
     
     //lowercase the word, prof said this is ok
     for (int i=0; i <= wordsize; i++) {
@@ -140,7 +142,7 @@ bool check_word(const char* word, hashmap_t hashtable[]) {
 
     //Set hashmap_t cursor equal to hashmap[bucket].
     hashmap_t cursor = hashtable[bucket];
-    //printf("lcword: %s    bucket word: %s\n", lcword, cursor->word);
+    //printf("Starting - lcword: %s    bucket word: %s\n", lcword, cursor->word);
 
     if (cursor != NULL) {
         //printf("Cursor is not NULL\n");
@@ -149,11 +151,13 @@ bool check_word(const char* word, hashmap_t hashtable[]) {
     while (cursor != NULL) {
         //If word equals cursor->word:
         if (strcmp(lcword, cursor->word) == 0) {
+           // printf("Found! lcword: %s    bucket word: %s\n", lcword, cursor->word);
             //return True.
             return true;
         }
         //Set curosr to cursor->next.
         cursor = cursor->next;
+        //printf("Looking - lcword: %s    bucket word: %s\n", lcword, cursor->word);
         //printf("NEXT CURSOR\n");
     }
     //return False.
@@ -173,14 +177,15 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
 
     char * line = NULL;
     int bucket;
-    size_t len = 0;
+    size_t len = LENGTH+1;
     int wordsize = 0;
     
 
     //Initialize all values in hash table to NULL.
     for (int i = 0; i < HASH_SIZE; i++) {
-        hashtable[i] = NULL;
-    }
+            hashtable[i] = NULL;
+        }
+    //printf("Null Hashtable\n");
 
     //Open dict_file from path stored in dictionary.
     FILE * fp;
@@ -195,10 +200,6 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
     }
     //printf("Dictionary File Opened Succesfully: %s \n", dictionary_file);
 
-    for(int i = 0; i < HASH_SIZE; i++) {
-            hashtable[i] = NULL;
-        }
-    //printf("Null Hashtable\n");
 
     // While word in dict_file is not EOF (end of file):
     while ((getline(&line, &len, fp)) != -1) {
@@ -213,10 +214,9 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
             exit(0);
         }
 
-
         //Set new_node->next to NULL.
         new_node->next = NULL;
-        //printf("set new node next to null\n");
+        //printf("Set new_node next to null\n");
 
 
         //strip contrl characters at the end.
@@ -226,7 +226,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
 
         //lowercase
         for (int i=0; i <= wordsize; i++) {
-		    line[i] = tolower(line[i]);
+            line[i] = tolower(line[i]);
         }
 
         //Set new_node->word equal to word.
@@ -246,13 +246,17 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
             //Set new_node->next to hashtable[bucket].
             //Set hashtable[bucket] to new_node. */
 
-        if(hashtable[bucket] != NULL){
-            new_node->next = hashtable[bucket];
-        }
+        
 
-        hashtable[bucket] = new_node;
+        if (hashtable[bucket] == NULL) {
+            hashtable[bucket] = new_node;
+        }
+        else {
+            new_node->next = hashtable[bucket];
+            hashtable[bucket] = new_node;
+        }
+        
     }
- 
     // Close dict_file.
     free(line);
     //printf("free line\n");
@@ -262,7 +266,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
 
     fclose(fp);
     //printf("close file\n");
-
+    
     return true;
 }
 
