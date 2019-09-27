@@ -40,7 +40,7 @@ return should be the # of mispelled words (from the counter)
 
 // Set int num_misspelled to 0.
 int num_misspelled = 0;
-size_t len = 47;
+size_t len = 60;
 char * line = NULL;
 char * found_words;
 
@@ -48,26 +48,31 @@ line = (char *)malloc(len * sizeof(char));
 
 //While line in fp is not EOF (end of file):
 // I tried to get this line to work for hours, and it would only read the first word, switching to fgets
-//while (getline(line, &len, fp) != NULL) {
-while (fgets(line, HASH_SIZE, fp) != NULL) {
+while (getline(&line, &len, fp) != -1) {
+//while (fgets(line, HASH_SIZE, fp) != NULL) {
     //Read the line.
     //printf("read the line - %s\n", line);
 
+
     //Split the line on spaces.
-    found_words = strtok(line, " \r\n");
+    found_words = strtok(line, " \t\r\n");
     //printf("found words - %s\n", found_words);
 
     while (found_words != NULL) {
         //printf("found words - not null\n");
 
-        //Remove Punctionation - Front and Back of word.
+       //Remove Punctionation - Front and Back of word.
         int i;
         char * fixed_word;
         
         for(i=strlen(found_words)-1; ispunct(found_words[i]);--i)
             found_words[i]='\0';
 
-        for(fixed_word=found_words;ispunct(*fixed_word);++fixed_word);
+        for(fixed_word=found_words;ispunct(*fixed_word);++fixed_word); 
+
+        fixed_word = found_words;
+
+        
         //printf("The current fixed word is - %s\n", fixed_word); 
 
         //If not check_word(word):
@@ -80,7 +85,7 @@ while (fgets(line, HASH_SIZE, fp) != NULL) {
             //Increment num_misspelled.
             num_misspelled++;
         }   
-        found_words = strtok(NULL, " ");
+        found_words = strtok(NULL, " \n");
     }
 
     
