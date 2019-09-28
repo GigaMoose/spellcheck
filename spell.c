@@ -60,7 +60,12 @@ while (getline(&line, &len, fp) != -1) {
 
     while (found_words != NULL) {
         //printf("found words - not null\n");
-
+        int p = strlen(found_words);
+        //printf("strlen: %i    word: %s\n", p, found_words);
+        if (strlen(found_words) > LENGTH) {
+            found_words = strtok(NULL, " \n");
+            continue;
+        }
        //Remove Punctionation - Front and Back of word.
         int i;
         char * fixed_word;
