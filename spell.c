@@ -79,7 +79,9 @@ while (getline(&line, &len, fp) != -1) {
         //If not check_word(word):
         if(!check_word(found_words, hashtable)) {
             //Append word to misspelled.
-            misspelled[num_misspelled] = found_words;
+            misspelled[num_misspelled] = (char *)malloc(sizeof(char)*(LENGTH+1));
+            strcpy(misspelled[num_misspelled],found_words);
+            //misspelled[num_misspelled] = found_words;
         
             //printf("Mispelled word - %s.  This is mispelled word # %d\n", found_words, num_misspelled+1);
 
