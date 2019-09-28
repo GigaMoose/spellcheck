@@ -234,18 +234,23 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
 
     // While word in dict_file is not EOF (end of file):
     //while ((getline(&line, &len, fp)) != -1) {
-    while (fgets(line, HASH_SIZE, fp) != NULL) {
+    
+    while (fgets(line, LENGTH, fp) != NULL) {
         //Set hashmap_t new_node to a new node.
         //printf("Not EOF\n");
 
         
-
+        //printf("the line is: %s\n", line);
 
         //strip contrl characters at the end.
         line[strcspn(line, "\r\n")] = 0;
         wordsize = strlen((const char *)line);
         //wordsize = 4;
         
+        if (wordsize > LENGTH) {
+            //printf("wordsize = %i\n", wordsize);
+            continue;
+        }
 
         //lowercase
         for (int i=0; i <= wordsize; i++) {
