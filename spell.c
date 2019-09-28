@@ -64,21 +64,22 @@ while (getline(&line, &len, fp) != -1) {
        //Remove Punctionation - Front and Back of word.
         int i;
         char * fixed_word;
-        
+        //printf("The current FOUND word is - %s\n", found_words); 
         for(i=strlen(found_words)-1; ispunct(found_words[i]);--i)
             found_words[i]='\0';
 
         for(fixed_word=found_words;ispunct(*fixed_word);++fixed_word); 
 
-        fixed_word = found_words;
+        //fixed_word = found_words;
+        found_words = fixed_word;
 
         
-        //printf("The current fixed word is - %s\n", fixed_word); 
+        //printf("The current fixed word is - %s\n", found_words); 
 
         //If not check_word(word):
-        if(!check_word(fixed_word, hashtable)) {
+        if(!check_word(found_words, hashtable)) {
             //Append word to misspelled.
-            misspelled[num_misspelled] = fixed_word;
+            misspelled[num_misspelled] = found_words;
         
             //printf("Mispelled word - %s.  This is mispelled word # %d\n", found_words, num_misspelled+1);
 
@@ -156,7 +157,7 @@ bool check_word(const char* word, hashmap_t hashtable[]) {
     while (cursor != NULL) {
         //If word equals cursor->word:
         if (strcmp(lcword, cursor->word) == 0) {
-           // printf("Found! lcword: %s    bucket word: %s\n", lcword, cursor->word);
+            //printf("Found! lcword: %s    bucket word: %s\n", lcword, cursor->word);
             //return True.
             return true;
         }
@@ -178,14 +179,31 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
     Once you call in those words, you call his hashfunction, then it returns back a number (hash).  You want ot use the hash to put in to a linked __builtin_va_list
 	You that word and that hash, in the linked list dictionary
     look for \n \r \feof(fptr)
+    
+    Initialize all values in hash table to NULL.
+    Open dict_file from path stored in dictionary.
+    If dict_file is NULL:
+        return false.
+    While word in dict_file is not EOF (end of file):
+        Set hashmap_t new_node to a new node.
+        Set new_node->next to NULL.
+        Set new_node->word equal to word.
+        Set int bucket to hash_function(word).
+        if hashtable[bucket] is NULL:
+            Set hashtable[bucket] to new_node.
+        else:
+            Set new_node->next to hashtable[bucket].
+            Set hashtable[bucket] to new_node.
+    Close dict_file.
+    
     */
 
     char * line = NULL;
     int bucket;
-    size_t len = LENGTH+1;
+    size_t len = LENGTH;
     int wordsize = 0;
     
-
+    line = (char*) malloc(LENGTH*sizeof(char));
     //Initialize all values in hash table to NULL.
     for (int i = 0; i < HASH_SIZE; i++) {
             hashtable[i] = NULL;
@@ -243,7 +261,10 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
         //Set int bucket to hash_function(word).
         bucket = hash_function(new_node->word);
         //printf("bucket is Hashed now\n");
-
+        //make sure not to overrun the bucket  Make sure it's >0 and <HASHSIZE, if it is, continue
+        if ((bucket < 0) || (bucket > HASH_SIZE)) {
+            continue;
+        }
 
         //if hashtable[bucket] is NULL:
             //Set hashtable[bucket] to new_node.
@@ -251,7 +272,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
             //Set new_node->next to hashtable[bucket].
             //Set hashtable[bucket] to new_node. */
 
-        
+        //printf("%i\n", bucket);
 
         if (hashtable[bucket] == NULL) {
             hashtable[bucket] = new_node;
