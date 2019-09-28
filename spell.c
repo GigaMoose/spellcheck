@@ -198,12 +198,13 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
     
     */
 
-    char * line = NULL;
+    char line[LENGTH] = "";
     int bucket;
-    size_t len = LENGTH;
+    //int len = LENGTH;
     int wordsize = 0;
+    node * last_node;
     
-    line = (char*) malloc(LENGTH*sizeof(char));
+    //line = (char*) malloc(LENGTH*sizeof(char));
     //Initialize all values in hash table to NULL.
     for (int i = 0; i < HASH_SIZE; i++) {
             hashtable[i] = NULL;
@@ -225,47 +226,67 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
 
 
     // While word in dict_file is not EOF (end of file):
-    while ((getline(&line, &len, fp)) != -1) {
+    //while ((getline(&line, &len, fp)) != -1) {
+    while (fgets(line, HASH_SIZE, fp) != NULL) {
         //Set hashmap_t new_node to a new node.
         //printf("Not EOF\n");
 
-        node * new_node = (node*)malloc(sizeof(node));
-        //printf("malloc\n");
-
-        if(new_node == NULL){
-            //printf("Unable to create new_node.\n");
-            exit(0);
-        }
-
-        //Set new_node->next to NULL.
-        new_node->next = NULL;
-        //printf("Set new_node next to null\n");
+        
 
 
         //strip contrl characters at the end.
         line[strcspn(line, "\r\n")] = 0;
-        wordsize = strlen(line);
+        wordsize = strlen((const char *)line);
+        //wordsize = 4;
         
 
         //lowercase
         for (int i=0; i <= wordsize; i++) {
             line[i] = tolower(line[i]);
         }
+        
+        if (line[wordsize] != '\0') {
+            line[wordsize] = '\0';
+        }
 
         //Set new_node->word equal to word.
-        strncpy(new_node->word,line,wordsize);
-        //printf("Word is: %s     word size is:  %d\n", line, wordsize);
+        
+        //printf("Word is: %s     word size is:  %i\n", line, wordsize);
         
 
         
         //Set int bucket to hash_function(word).
-        bucket = hash_function(new_node->word);
-        //printf("bucket is Hashed now\n");
-        //make sure not to overrun the bucket  Make sure it's >0 and <HASHSIZE, if it is, continue
+        bucket = hash_function(line);
+
         if ((bucket < 0) || (bucket > HASH_SIZE)) {
             continue;
         }
 
+        if (hashtable[bucket] == NULL) {        
+            hashtable[bucket] = (node*)malloc(sizeof(node));
+            //printf("malloc\n");
+            hashtable[bucket]->next = NULL;
+        }
+        else {
+            last_node = hashtable[bucket];
+            hashtable[bucket] = (node*)malloc(sizeof(node));
+            hashtable[bucket]->next = last_node;
+        }
+
+
+        if(hashtable[bucket] == NULL){
+            //printf("Unable to create new_node.\n");
+            exit(0);
+        }
+        //Set new_node->next to NULL.
+        strcpy(hashtable[bucket]->word,line);
+        //printf("Set new_node next to null\n");
+
+        //printf("wordsize: %ld\n", wordsize);
+        //printf("bucket is Hashed now\n");
+        //make sure not to overrun the bucket  Make sure it's >0 and <HASHSIZE, if it is, continue
+       
+        //printf("this is a test\n");
         //if hashtable[bucket] is NULL:
             //Set hashtable[bucket] to new_node.
         //else:
@@ -274,20 +295,12 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
 
         //printf("%i\n", bucket);
 
-        if (hashtable[bucket] == NULL) {
-            hashtable[bucket] = new_node;
-        }
-        else {
-            new_node->next = hashtable[bucket];
-            hashtable[bucket] = new_node;
-        }
-        
     }
     // Close dict_file.
-    free(line);
+    //free(line);
     //printf("free line\n");
 
-    line = NULL;
+    //line = NULL;
     //printf("NULL line\n");
 
     fclose(fp);
