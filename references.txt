@@ -1,0 +1,89 @@
+Credit - I'd like to thank the following people for going out of their way to assist me when I got stuck:
+- Prof Kevin Gallagher
+- Robert Smith
+- Matt Hibshmann
+- Many other students in the cohort that gave feedback and advice on various forums
+
+
+Notes for references, fairly complete:
+https://codereview.stackexchange.com/questions/141493/hash-map-implementation
+https://stackoverflow.com/questions/2174889/whats-the-differences-between-r-and-rb-in-fopen
+https://www.tutorialspoint.com/c_standard_library/c_function_fopen.htm
+
+
+Every string ends in a null byte \0
+
+That's how you know that the string is done
+
+New = persist = malloc
+
+
+https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/tutorial/
+https://www.zentut.com/c-tutorial/c-linked-list/
+
+https://riptutorial.com/c/example/8274/get-lines-from-a-file-using-getline--
+
+https://riptutorial.com/c/example/8274/get-lines-from-a-file-using-getline--
+
+https://stackoverflow.com/questions/2693776/removing-trailing-newline-character-from-fgets-input
+
+https://stackoverflow.com/questions/27165337/valgrind-uninitialised-value-error-with-getline-function
+
+https://stackoverflow.com/questions/40371698/why-is-strtok-not-iterating-through-its-while-loop-properly
+https://www.geeksforgeeks.org/strings-in-c-2/
+http://man7.org/linux/man-pages/man3/getline.3.html
+https://c-for-dummies.com/blog/?p=1112
+https://www.geeksforgeeks.org/fgets-gets-c-language/
+https://riptutorial.com/c/example/8274/get-lines-from-a-file-using-getline--
+https://www.humblec.com/forums/topic/getline-is-preferred-than-gets-fgets-and-scanf/
+https://www.gnu.org/software/libc/manual/html_node/Line-Input.html
+
+https://www.geeksforgeeks.org/why-strcpy-and-strncpy-are-not-safe-to-use/
+https://www.zentut.com/c-tutorial/c-character-type/
+https://beginnersbook.com/2014/01/c-pointers/
+
+https://www.geeksforgeeks.org/difference-strlen-sizeof-string-c-reviewed/
+https://stackoverflow.com/questions/9937181/sizeof-vs-strlen
+https://www.geeksforgeeks.org/strcmp-in-c-cpp/
+https://riptutorial.com/c/example/2033/comparsion--strcmp----strncmp----strcasecmp----strncasecmp-
+https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/rtref/strcasecmp.htm-
+https://www.geeksforgeeks.org/write-your-own-strcmp-which-ignores-cases/
+https://stackoverflow.com/questions/16909302/how-to-set-a-string-to-all-lowercase
+https://bytes.com/topic/c/answers/457791-size_t-ssize_t
+https://www.sparknotes.com/cs/searching/hashtables/section3/
+
+https://stackoverflow.com/questions/5820810/case-insensitive-string-comp-in-c
+https://stackoverflow.com/questions/31127260/strcasecmp-a-non-standard-function
+https://www.geeksforgeeks.org/write-your-own-strcmp-which-ignores-cases/
+http://www.cplusplus.com/reference/cstring/strtok/
+https://stackoverflow.com/questions/9283555/removing-punctuations-in-a-string-in-c
+https://stackoverflow.com/questions/11375178/remove-punctuation-at-beginning-and-end-of-a-string
+https://stackoverflow.com/questions/1841758/how-to-remove-punctuation-from-a-string-in-c
+https://stackoverflow.com/questions/38557481/what-does-t-r-n-a-stand-for
+https://www.geeksforgeeks.org/fgets-gets-c-language/
+http://www.cplusplus.com/reference/cstring/strtok/
+http://www.cplusplus.com/reference/cstring/strcspn/
+
+http://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm
+
+http://man7.org/linux/man-pages/man3/getline.3.html
+
+http://spc.cs.ucdavis.edu/index.php/situations/buffer-overflow
+
+https://stackoverflow.com/questions/9283555/removing-punctuations-in-a-string-in-c
+http://see-programming.blogspot.com/2013/07/c-program-to-remove-punctuations-in.html
+https://www.programiz.com/c-programming/c-dynamic-memory-allocation
+
+https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/tutorial/
+https://www.geeksforgeeks.org/linked-list-set-1-introduction/
+https://www.learn-c.org/en/Linked_lists
+https://www.zentut.com/c-tutorial/c-linked-list/
+https://codereview.stackexchange.com/questions/141493/hash-map-implementation
+https://beginnersbook.com/2014/01/c-pointers/
+http://web.eecs.utk.edu/~bvanderz/teaching/cs140Fa09/labs/lab3/strtok.html
+https://stackoverflow.com/questions/13551017/find-the-size-of-a-string-pointed-by-a-pointer
+
+
+http://check.sourceforge.net/doc/check_html/check_3.html
+
+
