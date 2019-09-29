@@ -94,6 +94,8 @@ while (getline(&line, &len, fp) != -1) {
             num_misspelled++;
         }   
         found_words = strtok(NULL, " \n");
+
+        
     }
 
     
